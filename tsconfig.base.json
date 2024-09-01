@@ -13,9 +13,10 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {
-      "@/api-utils": ["libs/api/utils/src/index.ts"]
+      "@/shared-schema": ["libs/shared/schema/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
