@@ -1,7 +1,13 @@
-type ResponseDataType<T> = {
+export type ResponseDataType<T> = {
   data: T;
-  code: 200;
+  statusCode: 200 | 201;
   message: string;
+};
+
+export type ThrowResponse = {
+  statusCode: number;
+  message: string | object | undefined;
+  reasons: string | object | Error | undefined;
 };
 
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
@@ -19,13 +25,27 @@ export const HttpStatusCode: Record<number, string> = {
   503: 'Service Unavailable',
 };
 
-export function responseData<T>({ code, data, message }: ResponseDataType<T>) {
-  const headers = new Headers();
-  headers.set('Content-Type', 'application/json');
+export function throwResponse({ message, reasons, statusCode }: ThrowResponse) {
+  const result = {
+    statusCode,
+    message: message || HttpStatusCode[statusCode],
+    reasons,
+  };
 
+  return result;
+}
+
+export function responseData<T>({
+  statusCode,
+  data,
+  message,
+}: ResponseDataType<T>) {
   const response = Array.isArray(data)
-    ? { data: [...data], code, message: message || HttpStatusCode[code] }
-    : { data, code, message: message || HttpStatusCode[code] };
-  const responseInit: ResponseInit = { status: code, headers };
-  return new Response(JSON.stringify(response), responseInit);
+    ? {
+        data: [...data],
+        statusCode,
+        message: message || HttpStatusCode[statusCode],
+      }
+    : { data, statusCode, message: message || HttpStatusCode[statusCode] };
+  return response;
 }
