@@ -16,6 +16,7 @@
     "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {
+      "@/database": ["libs/api/database/src/index.ts"],
       "@/shared-schema": ["libs/shared/schema/src/index.ts"]
     }
   },
