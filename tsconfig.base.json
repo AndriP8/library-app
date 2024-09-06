@@ -18,7 +18,9 @@
     "paths": {
       "@/database": ["libs/api/database/src/index.ts"],
       "@/migrations": ["libs/api/migrations/src/migrate.ts"],
-      "@/shared-schema": ["libs/shared/schema/src/index.ts"]
+      "@/shared/schema": ["libs/shared/schema/src/index.ts"],
+      "@/api/utils": ["libs/api/utils/src/index.ts"],
+      "@/api/auth": ["libs/api/auth/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
