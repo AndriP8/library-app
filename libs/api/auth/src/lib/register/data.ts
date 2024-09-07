@@ -29,7 +29,7 @@ export async function createUser(
     res.code(500).send(
       throwResponse({
         statusCode: 500,
-        message: undefined,
+        message: 'Internal Server Error',
         reasons: error.message,
       })
     );

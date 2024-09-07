@@ -17,8 +17,8 @@ const createUserBody = User.omit({
 
 // Login
 const loginBody = UserDb.pick({ email: true, password: true });
-const loginResponse = z.object({
-  token: z.number(),
+const loginResponse = defaultResponse.extend({
+  token: z.string(),
 });
 
 export const authSchema = {
