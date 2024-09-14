@@ -1,46 +1,51 @@
+import { JWT } from '@fastify/jwt';
 import * as argon2 from 'argon2';
-import { createSecretKey } from 'crypto';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import * as jose from 'jose';
+import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
 
 import { throwResponse } from '@/api/utils';
 import { db } from '@/database';
 import { authSchema } from '@/shared/schema';
 
+declare module 'fastify' {
+  interface FastifyInstance {
+    jwt: JWT;
+  }
+}
+
 type LoginBody = z.infer<typeof authSchema.login.body>;
 export async function login(
   req: FastifyRequest<{ Body: LoginBody }>,
-  res: FastifyReply
+  res: FastifyReply,
+  fastify: FastifyInstance
 ) {
   try {
     const { email, password } = req.body;
-    const secretKey = createSecretKey(process.env.JWT_SECRET || '', 'utf-8');
     const data = await db
       .selectFrom('users')
       .selectAll()
       .where('email', '=', email)
       .executeTakeFirst();
-    const token = await new jose.SignJWT({ name: data?.name })
-      .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
-      .setExpirationTime('2h')
-      .sign(secretKey);
     if (!data) {
       return res.code(400).send(
         throwResponse({
           statusCode: 400,
           message: 'Invalid Email',
-          reasons: undefined,
+          reasons: 'Failed to verify email, email does not exist',
         })
       );
     }
+    const token = fastify.jwt.sign(
+      { id: data.id, name: data.name },
+      { expiresIn: '1d' }
+    );
     const verifyPassword = await argon2.verify(data.password, password);
     if (!verifyPassword) {
       return res.code(400).send(
         throwResponse({
           statusCode: 400,
           message: 'Invalid password',
-          reasons: undefined,
+          reasons: 'Failed to verify password, password not match',
         })
       );
     }

@@ -20,7 +20,7 @@ export async function registerRoutes(fastify: FastifyInstance) {
     handler: createUser,
     errorHandler: (error, _req, res) => {
       if (error instanceof ZodError) {
-        res.code(400).send(
+        return res.code(400).send(
           throwResponse({
             statusCode: 400,
             message: 'Invalid Request',

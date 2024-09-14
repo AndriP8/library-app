@@ -26,7 +26,7 @@ export async function createUser(
         responseData({ data, statusCode: 201, message: 'Success create user' })
       );
   } catch (error) {
-    res.code(500).send(
+    return res.code(500).send(
       throwResponse({
         statusCode: 500,
         message: 'Internal Server Error',
