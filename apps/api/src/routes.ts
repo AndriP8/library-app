@@ -1,6 +1,7 @@
 import { FastifyPluginAsync } from 'fastify';
 
 import { loginRoutes, registerRoutes } from '@/api/auth';
+import { routes as usersRoute } from '@/api/users';
 
 type Route = {
   plugin: FastifyPluginAsync;
@@ -14,6 +15,10 @@ export const routes: Route[] = [
   },
   {
     plugin: loginRoutes,
+    prefix: '/api',
+  },
+  {
+    plugin: usersRoute,
     prefix: '/api',
   },
 ];

@@ -18,6 +18,10 @@ const createUserBody = User.omit({
   password: z.string().min(6),
 });
 
+// Delete data
+const deleteUSerBody = User.pick({ id: true });
+const deleteUSerResponse = defaultResponse.extend({ data: z.literal('Ok') });
+
 export const usersSchema = {
   read: {
     path: '/users',
@@ -27,5 +31,10 @@ export const usersSchema = {
     path: '/users',
     body: createUserBody,
     response: createUserResponse,
+  },
+  delete: {
+    path: '/users',
+    body: deleteUSerBody,
+    response: deleteUSerResponse,
   },
 } satisfies Partial<SchemaType>;

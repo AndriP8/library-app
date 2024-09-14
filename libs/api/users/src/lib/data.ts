@@ -6,17 +6,23 @@ import { responseData, throwResponse } from '@/api/utils';
 import { db } from '@/database';
 import { usersSchema } from '@/shared/schema';
 
-export async function selectUsers(
-  _req: FastifyRequest<{ Querystring: { asd: 'oke' } }>,
-  res: FastifyReply
-) {
-  const data = await db.selectFrom('users').selectAll().execute();
-  console.log(_req.query.asd);
-  return res
-    .code(200)
-    .send(
-      responseData({ data, statusCode: 200, message: 'Success get users' })
+export async function selectUsers(req: FastifyRequest, res: FastifyReply) {
+  try {
+    const data = await db.selectFrom('users').selectAll().execute();
+    return res
+      .code(200)
+      .send(
+        responseData({ data, statusCode: 200, message: 'Success get users' })
+      );
+  } catch (error) {
+    return res.code(500).send(
+      throwResponse({
+        statusCode: 500,
+        message: 'Internal Server Error',
+        reasons: error.message,
+      })
     );
+  }
 }
 
 type CreateUserBody = z.infer<typeof usersSchema.create.body>;
@@ -39,10 +45,47 @@ export async function insertUser(
         responseData({ data, statusCode: 201, message: 'Success create user' })
       );
   } catch (error) {
-    res.code(500).send(
+    return res.code(500).send(
       throwResponse({
         statusCode: 500,
-        message: undefined,
+        message: 'Internal Server Error',
+        reasons: error.message,
+      })
+    );
+  }
+}
+
+type DeleteUserBody = z.infer<typeof usersSchema.delete.body>;
+export async function deleteUser(
+  req: FastifyRequest<{ Body: DeleteUserBody }>,
+  res: FastifyReply
+) {
+  try {
+    const data = await db
+      .deleteFrom('users')
+      .where('id', '=', req.body.id)
+      .executeTakeFirst();
+    if (Number(data.numDeletedRows.toString())) {
+      return res.code(200).send(
+        responseData({
+          data: 'Ok',
+          statusCode: 200,
+          message: 'Success delete user',
+        })
+      );
+    }
+    res.code(400).send(
+      throwResponse({
+        statusCode: 400,
+        message: 'Failed delete user',
+        reasons: 'User id is invalid or does not exist.',
+      })
+    );
+  } catch (error) {
+    return res.code(500).send(
+      throwResponse({
+        statusCode: 500,
+        message: 'Internal Server Error',
         reasons: error.message,
       })
     );

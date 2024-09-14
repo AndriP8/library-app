@@ -30,8 +30,8 @@ export async function login(
       return res.code(400).send(
         throwResponse({
           statusCode: 400,
-          message: 'Invalid Email',
-          reasons: 'Failed to verify email, email does not exist',
+          message: 'Invalid request',
+          reasons: 'Invalid email or password',
         })
       );
     }
@@ -44,8 +44,8 @@ export async function login(
       return res.code(400).send(
         throwResponse({
           statusCode: 400,
-          message: 'Invalid password',
-          reasons: 'Failed to verify password, password not match',
+          message: 'Invalid request',
+          reasons: 'Invalid email or password',
         })
       );
     }

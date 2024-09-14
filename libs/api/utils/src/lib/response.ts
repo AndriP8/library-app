@@ -6,8 +6,8 @@ export type ResponseDataType<T> = {
 
 export type ThrowResponse = {
   statusCode: number;
-  message: string | object | undefined;
-  reasons: string | object | Error | undefined;
+  message: string | object;
+  reasons: string | object | Error;
 };
 
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
