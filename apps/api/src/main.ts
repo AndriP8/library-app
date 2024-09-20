@@ -28,7 +28,7 @@ fastify.register(fastifyJwt, {
 
 // Declare a route
 routes.forEach((route) => {
-  fastify.register(route.plugin, { prefix: route.prefix });
+  fastify.register(route.plugin, { prefix: '/api' });
 });
 
 // Run the server!

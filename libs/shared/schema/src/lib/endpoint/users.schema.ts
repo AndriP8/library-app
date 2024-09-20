@@ -19,7 +19,6 @@ const createUserBody = User.omit({
 });
 
 // Delete data
-const deleteUSerBody = User.pick({ id: true });
 const deleteUSerResponse = defaultResponse.extend({ data: z.literal('Ok') });
 
 export const usersSchema = {
@@ -34,7 +33,6 @@ export const usersSchema = {
   },
   delete: {
     path: '/users',
-    body: deleteUSerBody,
     response: deleteUSerResponse,
   },
 } satisfies Partial<SchemaType>;

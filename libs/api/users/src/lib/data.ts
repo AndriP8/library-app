@@ -55,15 +55,14 @@ export async function insertUser(
   }
 }
 
-type DeleteUserBody = z.infer<typeof usersSchema.delete.body>;
 export async function deleteUser(
-  req: FastifyRequest<{ Body: DeleteUserBody }>,
+  req: FastifyRequest<{ Params: { id: string } }>,
   res: FastifyReply
 ) {
   try {
     const data = await db
       .deleteFrom('users')
-      .where('id', '=', req.body.id)
+      .where('id', '=', req.params.id)
       .executeTakeFirst();
     if (Number(data.numDeletedRows.toString())) {
       return res.code(200).send(
