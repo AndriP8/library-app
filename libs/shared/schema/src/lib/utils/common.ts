@@ -1,5 +1,8 @@
 import { z, ZodSchema } from 'zod';
 
+export type PickPartial<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>> &
+  Partial<Pick<T, K>>;
+
 type ReadData = {
   path: string;
   response: ZodSchema;
@@ -14,7 +17,7 @@ export type SchemaType = {
   readDetail: ReadData;
   create: ManipulationData;
   update: ManipulationData;
-  delete: ManipulationData;
+  delete: Omit<ManipulationData, 'body'>;
 } & Record<string, ReadData | ManipulationData>;
 
 export const defaultResponse = z

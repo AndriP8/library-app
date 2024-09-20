@@ -21,7 +21,8 @@
       "@/shared/schema": ["libs/shared/schema/src/index.ts"],
       "@/api/utils": ["libs/api/utils/src/index.ts"],
       "@/api/auth": ["libs/api/auth/src/index.ts"],
-      "@/api/users": ["libs/api/users/src/index.ts"]
+      "@/api/users": ["libs/api/users/src/index.ts"],
+      "@/api/authors": ["libs/api/authors/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

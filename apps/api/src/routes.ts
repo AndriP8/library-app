@@ -19,6 +19,8 @@ export const routes: Route[] = [
   },
   {
     plugin: usersRoute,
-    prefix: '/api',
+  },
+  {
+    plugin: authorsRoute,
   },
 ];
