@@ -33,10 +33,13 @@ const runMigration = async (action: MigrationAction) => {
 
   if (action === 'migrate') {
     const up = process.argv.find((arg) => arg.substring(0, 4) === '--up');
+    const down = process.argv.find((arg) => arg.substring(0, 6) === '--down');
     let migrationResult: MigrationResultSet = {};
 
     if (up) {
       migrationResult = await migrator.migrateUp();
+    } else if (down) {
+      migrationResult = await migrator.migrateDown();
     } else {
       migrationResult = await migrator.migrateToLatest();
     }

@@ -1,6 +1,6 @@
-import { CreateTableBuilder, sql } from 'kysely';
+import { CreateTableBuilder, RawBuilder, sql } from 'kysely';
 
-export const defaultTimestamp = sql`timezone('Asia/Jakarta'::text, now())`;
+export const defaultTimestamp: RawBuilder<string> = sql`TO_CHAR(timezone('Asia/Jakarta', now()), 'YYYY-MM-DD HH24:MI:SS.MS')`;
 
 export const PRIMARY_KEY_COLUMN = <T extends string, C extends string = never>(
   builder: CreateTableBuilder<T, C>

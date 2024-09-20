@@ -1,7 +1,7 @@
 import { Kysely } from 'kysely';
 import { DB } from 'kysely-codegen';
 
-import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN } from '../common-column';
+import { PRIMARY_KEY_COLUMN, TIMESTAMPS_COLUMN } from '@/api/utils';
 
 export async function up(db: Kysely<DB>): Promise<void> {
   // Create users table
