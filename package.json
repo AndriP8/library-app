@@ -8,8 +8,8 @@
     "dev:api": "nx run api:serve",
     "pre-dev:api": "docker compose up -d",
     "build:api": "nx run api:build",
-    "db:migrate": "export APP_ROOT_DIR=$(pwd) && env-cmd tsx -r dotenv/config libs/api/migrations/src/migrate.ts migrate",
-    "db:rollback": "export APP_ROOT_DIR=$(pwd) && env-cmd tsx -r dotenv/config libs/api/migrations/src/migrate.ts rollback"
+    "db:migrate": "export APP_ROOT_DIR=$(pwd) TSX_TSCONFIG_PATH=./tsconfig.base.json && env-cmd tsx -r dotenv/config libs/api/migrations/src/migrate.ts migrate",
+    "db:rollback": "export APP_ROOT_DIR=$(pwd) TSX_TSCONFIG_PATH=./tsconfig.base.json && env-cmd tsx -r dotenv/config libs/api/migrations/src/migrate.ts rollback"
   },
   "private": true,
   "dependencies": {
