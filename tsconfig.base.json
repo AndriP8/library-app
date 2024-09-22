@@ -16,13 +16,14 @@
     "strictNullChecks": true,
     "baseUrl": ".",
     "paths": {
+      "@/api/auth": ["libs/api/auth/src/index.ts"],
+      "@/api/authors": ["libs/api/authors/src/index.ts"],
+      "@/api/users": ["libs/api/users/src/index.ts"],
+      "@/api/utils": ["libs/api/utils/src/index.ts"],
       "@/database": ["libs/api/database/src/index.ts"],
       "@/migrations": ["libs/api/migrations/src/migrate.ts"],
-      "@/shared/schema": ["libs/shared/schema/src/index.ts"],
-      "@/api/utils": ["libs/api/utils/src/index.ts"],
-      "@/api/auth": ["libs/api/auth/src/index.ts"],
-      "@/api/users": ["libs/api/users/src/index.ts"],
-      "@/api/authors": ["libs/api/authors/src/index.ts"]
+      "@/shared/enums": ["libs/shared/enums/src/index.ts"],
+      "@/shared/schema": ["libs/shared/schema/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
