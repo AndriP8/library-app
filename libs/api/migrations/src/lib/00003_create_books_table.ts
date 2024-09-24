@@ -9,12 +9,11 @@ export async function up(db: Kysely<DB>): Promise<void> {
     .createTable('books')
     .$call(PRIMARY_KEY_COLUMN)
     .$call(TIMESTAMPS_COLUMN)
-    .addColumn('title', 'varchar(255)', (col) => col.notNull())
+    .addColumn('title', 'varchar(255)', (col) => col.notNull().unique())
     .addColumn('coverImage', 'text', (col) => col.notNull())
     .addColumn('description', 'text', (col) => col.notNull())
     .addColumn('publisher', 'varchar(255)', (col) => col.notNull())
     .addColumn('datePublished', 'text', (col) => col.notNull())
-    .addColumn('genre', 'varchar(255)', (col) => col.notNull())
     .addColumn('language', 'varchar(255)', (col) => col.notNull())
     .addColumn('isbn', 'integer', (col) => col.notNull())
     .addColumn('totalPage', 'integer', (col) => col.notNull())
@@ -27,12 +26,15 @@ export async function up(db: Kysely<DB>): Promise<void> {
   await db.schema
     .createTable('authors')
     .$call(PRIMARY_KEY_COLUMN)
-    .addColumn('firstname', 'varchar(255)', (col) => col.notNull().unique())
-    .addColumn('lastname', 'varchar(255)')
+    .addColumn('firstName', 'varchar(255)', (col) => col.notNull())
+    .addColumn('lastName', 'varchar(255)', (col) => col.defaultTo(''))
     .addColumn('bio', 'text', (col) => col.notNull())
     .addColumn('avatarUrl', 'text', (col) => col.notNull())
-    .addColumn('totalPublishedBook', 'integer', (col) => col.defaultTo(0))
+    .addColumn('totalPublishedBook', 'integer', (col) =>
+      col.defaultTo(0).notNull()
+    )
     .$call(TIMESTAMPS_COLUMN)
+    .addUniqueConstraint('unique_author', ['firstName', 'lastName'])
     .execute();
 
   // Create bookAuthors table
@@ -49,7 +51,7 @@ export async function up(db: Kysely<DB>): Promise<void> {
 }
 
 export async function down(db: Kysely<unknown>): Promise<void> {
+  await db.schema.dropTable('bookAuthors').execute();
   await db.schema.dropTable('books').execute();
   await db.schema.dropTable('authors').execute();
-  await db.schema.dropTable('bookAuthors').execute();
 }
