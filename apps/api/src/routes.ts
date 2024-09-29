@@ -21,4 +21,7 @@ export const routes: Route[] = [
   {
     plugin: authorsRoute,
   },
+  {
+    plugin: bookCategoriesSchema,
+  },
 ];

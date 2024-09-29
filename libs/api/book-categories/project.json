@@ -1,0 +1,9 @@
+{
+  "name": "book-categories",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/book-categories/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project book-categories --web",
+  "targets": {}
+}

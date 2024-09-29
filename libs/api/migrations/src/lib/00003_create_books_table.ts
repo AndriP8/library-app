@@ -46,7 +46,6 @@ export async function up(db: Kysely<DB>): Promise<void> {
     .addColumn('authorId', 'uuid', (col) =>
       col.references('authors.id').onDelete('cascade').onUpdate('cascade')
     )
-    .addPrimaryKeyConstraint('bookAuthors_pk', ['bookId', 'authorId'])
     .execute();
 }
 

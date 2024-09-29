@@ -18,6 +18,8 @@
     "paths": {
       "@/api/auth": ["libs/api/auth/src/index.ts"],
       "@/api/authors": ["libs/api/authors/src/index.ts"],
+      "@/api/book-categories": ["libs/api/book-categories/src/index.ts"],
+      "@/api/books": ["libs/api/books/src/index.ts"],
       "@/api/users": ["libs/api/users/src/index.ts"],
       "@/api/utils": ["libs/api/utils/src/index.ts"],
       "@/database": ["libs/api/database/src/index.ts"],
