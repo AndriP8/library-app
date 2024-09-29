@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { ZodTypeProvider } from 'fastify-type-provider-zod';
-import { z, ZodError } from 'zod';
+import { ZodError } from 'zod';
 
 import { throwResponse, verifyToken } from '@/api/utils';
 import { authorsSchema } from '@/shared/schema';
@@ -37,7 +37,7 @@ export async function routes(fastify: FastifyInstance) {
     method: 'POST',
     url: authorsSchema.create.path,
     schema: {
-      body: authorsSchema['create']['body'],
+      body: authorsSchema.create.body,
       response: {
         201: authorsSchema.create.response,
       },
@@ -59,7 +59,7 @@ export async function routes(fastify: FastifyInstance) {
     method: 'PUT',
     url: authorsSchema.update.path,
     schema: {
-      body: authorsSchema['update']['body'],
+      body: authorsSchema.update.body,
       response: {
         201: authorsSchema.update.response,
       },
@@ -81,7 +81,7 @@ export async function routes(fastify: FastifyInstance) {
     method: 'DELETE',
     url: authorsSchema.delete.path,
     schema: {
-      params: z.object,
+      params: authorsSchema.delete.params,
       response: {
         200: authorsSchema.delete.response,
       },

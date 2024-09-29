@@ -24,6 +24,8 @@ const updateAuthorBody = Author.omit({
 // Delete data
 const deleteAuthorResponse = defaultResponse.extend({ data: z.literal('Ok') });
 
+const idParams = z.object({ id: z.string() });
+
 const path = '/authors';
 
 export const authorsSchema = {
@@ -38,11 +40,13 @@ export const authorsSchema = {
   },
   update: {
     path: path + '/:id',
+    params: idParams,
     body: updateAuthorBody,
     response: updateAuthorResponse,
   },
   delete: {
     path: path + '/:id',
+    params: idParams,
     response: deleteAuthorResponse,
   },
 } satisfies Partial<SchemaType>;
