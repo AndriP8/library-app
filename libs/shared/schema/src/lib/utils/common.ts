@@ -11,6 +11,7 @@ type ManipulationData = {
   path: string;
   response: ZodSchema;
   body: ZodSchema;
+  params?: ZodSchema;
 };
 export type SchemaType = {
   read: ReadData;
