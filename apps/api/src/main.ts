@@ -6,6 +6,8 @@ import {
   validatorCompiler,
 } from 'fastify-type-provider-zod';
 
+import { throwResponse } from '@/api/utils';
+
 import { routes } from './routes';
 
 const fastify = Fastify({
@@ -15,6 +17,18 @@ const fastify = Fastify({
 // Validation
 fastify.setValidatorCompiler(validatorCompiler);
 fastify.setSerializerCompiler(serializerCompiler);
+fastify.register(function (instance, options, done) {
+  instance.setNotFoundHandler(function (request, reply) {
+    reply.send(
+      throwResponse({
+        statusCode: 404,
+        message: 'Not Found',
+        reasons: `Route ${request.method}:${request.url} not found`,
+      })
+    );
+  });
+  done();
+});
 
 // Database
 fastify.register(FastifyPostgres, {
