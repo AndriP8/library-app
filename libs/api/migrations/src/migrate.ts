@@ -62,6 +62,36 @@ const runMigration = async (action: MigrationAction) => {
       process.exit(1);
     }
   }
+  if (action === 'rollback') {
+    const target = process.argv
+      .find((arg) => arg.substring(0, 9) === '--target=')
+      ?.split('--target=')[1];
+    let migrationResult: MigrationResultSet = {};
+
+    if (!target) {
+      console.error('ERROR', ':::', 'you must provide a target to rollback!');
+      process.exit(1);
+    }
+
+    migrationResult = await migrator.migrateTo(target);
+    const { error, results } = migrationResult;
+
+    results?.forEach((it) => {
+      if (it.status === 'Success') {
+        console.info(
+          `🍀 migration "${it.migrationName}" was executed successfully`
+        );
+      } else if (it.status === 'Error') {
+        console.error(`🔥 failed to rollback migration "${it.migrationName}"`);
+      }
+    });
+
+    if (error) {
+      console.error('🔥 failed to migrate');
+      console.error(error);
+      process.exit(1);
+    }
+  }
 };
 
 const migrationAction = process.argv[2] as MigrationAction;
