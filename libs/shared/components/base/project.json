@@ -1,0 +1,20 @@
+{
+  "name": "shared-components-base",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shared/components/base/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/shared/components/base",
+        "main": "libs/shared/components/base/src/index.ts",
+        "tsConfig": "libs/shared/components/base/tsconfig.lib.json",
+        "assets": ["libs/shared/components/base/*.md"],
+        "postcssConfig": "postcss.config.js"
+      }
+    }
+  }
+}
