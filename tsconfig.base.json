@@ -25,7 +25,8 @@
       "@/database": ["libs/api/database/src/index.ts"],
       "@/migrations": ["libs/api/migrations/src/migrate.ts"],
       "@/shared/enums": ["libs/shared/enums/src/index.ts"],
-      "@/shared/schema": ["libs/shared/schema/src/index.ts"]
+      "@/shared/schema": ["libs/shared/schema/src/index.ts"],
+      "@/shared/utils": ["libs/shared/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
