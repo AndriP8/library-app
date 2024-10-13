@@ -1,6 +1,7 @@
 export * from './lib/alert';
 export * from './lib/alert-dialog';
 export * from './lib/button';
+export * from './lib/data-table';
 export * from './lib/dialog';
 export * from './lib/form';
 export * from './lib/input';
