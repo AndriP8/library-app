@@ -1,4 +1,4 @@
-import './global.css';
+import '@/shared/styles';
 
 export const metadata = {
   title: 'Welcome to backoffice',
