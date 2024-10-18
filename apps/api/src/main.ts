@@ -1,3 +1,4 @@
+import cors from '@fastify/cors';
 import fastifyJwt from '@fastify/jwt';
 import FastifyPostgres from '@fastify/postgres';
 import Fastify from 'fastify';
@@ -24,7 +25,7 @@ fastify.register(function (instance, options, done) {
         statusCode: 404,
         message: 'Not Found',
         reasons: `Route ${request.method}:${request.url} not found`,
-      })
+      }),
     );
   });
   done();
@@ -39,6 +40,7 @@ fastify.register(FastifyPostgres, {
 fastify.register(fastifyJwt, {
   secret: process.env.JWT_SECRET || '',
 });
+fastify.register(cors, { origin: '*' });
 
 // Declare a route
 routes.forEach((route) => {
