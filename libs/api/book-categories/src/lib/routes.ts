@@ -49,8 +49,8 @@ export async function routes(fastify: FastifyInstance) {
           throwResponse({
             statusCode: 400,
             message: 'Invalid Request',
-            reasons: error.flatten().fieldErrors,
-          })
+            reasons: JSON.stringify(error.flatten().fieldErrors),
+          }),
         );
       }
     },
@@ -72,8 +72,8 @@ export async function routes(fastify: FastifyInstance) {
           throwResponse({
             statusCode: 400,
             message: 'Invalid Request',
-            reasons: error.flatten().fieldErrors,
-          })
+            reasons: JSON.stringify(error.flatten().fieldErrors),
+          }),
         );
       }
     },
@@ -94,8 +94,8 @@ export async function routes(fastify: FastifyInstance) {
           throwResponse({
             statusCode: 400,
             message: 'Invalid Request',
-            reasons: error.flatten().fieldErrors,
-          })
+            reasons: JSON.stringify(error.flatten().fieldErrors),
+          }),
         );
       }
     },

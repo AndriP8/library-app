@@ -8,18 +8,35 @@ import { bookCategoriesSchema } from '@/shared/schema';
 
 // GET /api/book-categories
 export async function selectBookCategories(
-  _req: FastifyRequest,
+  req: FastifyRequest<{
+    Querystring: {
+      size: number;
+      page: number;
+    };
+  }>,
   res: FastifyReply
 ) {
   try {
-    const data = await db.selectFrom('categories').selectAll().execute();
-    return res.code(200).send(
-      responseData({
-        data,
-        statusCode: 200,
-        message: 'Success get book categories',
-      })
-    );
+    const page = Number(req.query.page);
+    const size = Number(req.query.size);
+    const data = await db
+      .selectFrom('categories')
+      .offset((page === 0 ? page : page - 1) * size)
+      .limit(size)
+      .selectAll()
+      .execute();
+    return res.code(200).send({
+      data,
+      pagination: {
+        page,
+        size,
+        total: data.length,
+        // Harcoded
+        totalPages: 3,
+      },
+      statusCode: 200,
+      message: 'Success get book categories',
+    });
   } catch (error) {
     return res.code(500).send(
       throwResponse({

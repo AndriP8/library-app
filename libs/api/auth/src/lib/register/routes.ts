@@ -24,8 +24,8 @@ export async function registerRoutes(fastify: FastifyInstance) {
           throwResponse({
             statusCode: 400,
             message: 'Invalid Request',
-            reasons: error.flatten().fieldErrors,
-          })
+            reasons: JSON.stringify(error.flatten().fieldErrors),
+          }),
         );
       }
     },
