@@ -22,6 +22,7 @@
       "@/api/books": ["libs/api/books/src/index.ts"],
       "@/api/users": ["libs/api/users/src/index.ts"],
       "@/api/utils": ["libs/api/utils/src/index.ts"],
+      "@/backoffice/register": ["libs/backoffice/register/src/index.ts"],
       "@/database": ["libs/api/database/src/index.ts"],
       "@/migrations": ["libs/api/migrations/src/migrate.ts"],
       "@/shared/components/base": ["libs/shared/components/base/src/index.ts"],
