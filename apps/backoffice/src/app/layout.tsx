@@ -1,6 +1,7 @@
 import '@/shared/styles';
 
 import { Toaster } from '@/shared/components/base';
+import { TokenContextProvider } from '@/shared/utils';
 
 export const metadata = {
   title: 'Welcome to backoffice',
@@ -15,8 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {children}
-        <Toaster />
+        <TokenContextProvider>
+          {children}
+          <Toaster />
+        </TokenContextProvider>
       </body>
     </html>
   );
