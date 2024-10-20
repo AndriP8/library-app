@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "dev:backoffice": "nx run backoffice:dev",
-    "build:backoffice": "nx run backoffice:build",
+    "dev:web-apps": "nx run web-apps:dev",
+    "build:web-apps": "nx run web-apps:build",
     "dev:api": "nx run api:serve",
     "pre-dev:api": "docker compose up -d",
     "build:api": "nx run api:build",
