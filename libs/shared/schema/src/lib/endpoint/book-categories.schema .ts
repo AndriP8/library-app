@@ -1,12 +1,14 @@
 import { z } from 'zod';
 
 import { BookCategories } from '../database/book-categories';
-import { defaultResponse, SchemaType } from '../utils';
+import { defaultQuery, defaultResponse, SchemaType } from '../utils';
 
 // List data
 const listBookCategoriesResponse = defaultResponse.extend({
   data: z.array(BookCategories),
 });
+
+const listBookCategoriesQuery = defaultQuery;
 
 // Create data
 const createBookCategoriesResponse = defaultResponse.extend({
@@ -39,6 +41,7 @@ const path = '/book-categories';
 export const bookCategoriesSchema = {
   read: {
     path,
+    query: listBookCategoriesQuery,
     response: listBookCategoriesResponse,
   },
   create: {

@@ -29,7 +29,7 @@ export async function routes(fastify: FastifyInstance) {
           statusCode: 400,
           message: 'Invalid Request',
           reasons: error.message,
-        })
+        }),
       );
     },
   });

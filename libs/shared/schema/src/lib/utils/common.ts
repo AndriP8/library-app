@@ -6,6 +6,7 @@ export type PickPartial<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>> &
 type ReadData = {
   path: string;
   response: ZodSchema;
+  query?: ZodSchema;
 };
 type ManipulationData = {
   path: string;
@@ -27,3 +28,9 @@ export const defaultResponse = z
     message: z.string(),
   })
   .strict();
+
+export const defaultQuery = z.object({
+  page: z.number().default(1),
+  size: z.number().default(10),
+  search: z.string().optional(),
+});

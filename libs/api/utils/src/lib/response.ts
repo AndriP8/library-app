@@ -2,6 +2,12 @@ export type ResponseDataType<T> = {
   data: T;
   statusCode: 200 | 201;
   message: string;
+  pagination?: {
+    page: number;
+    size: number;
+    totalSize: number;
+    totalPages: number;
+  };
 };
 
 export type ThrowResponse = {
@@ -39,13 +45,20 @@ export function responseData<T>({
   statusCode,
   data,
   message,
+  pagination,
 }: ResponseDataType<T>) {
-  const response = Array.isArray(data)
-    ? {
-        data: [...data],
-        statusCode,
-        message: message || HttpStatusCode[statusCode],
-      }
+  return Array.isArray(data)
+    ? pagination
+      ? {
+          data: [...data],
+          statusCode,
+          message: message || HttpStatusCode[statusCode],
+          pagination,
+        }
+      : {
+          data: [...data],
+          statusCode,
+          message: message || HttpStatusCode[statusCode],
+        }
     : { data, statusCode, message: message || HttpStatusCode[statusCode] };
-  return response;
 }

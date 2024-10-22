@@ -7,33 +7,24 @@ import { db } from '@/database';
 import { bookCategoriesSchema } from '@/shared/schema';
 
 // GET /api/book-categories
+type ReadBookCategoriesQuery = z.infer<typeof bookCategoriesSchema.read.query>;
 export async function selectBookCategories(
   req: FastifyRequest<{
-    Querystring: {
-      size: number;
-      page: number;
-    };
+    Querystring: ReadBookCategoriesQuery;
   }>,
-  res: FastifyReply
+  res: FastifyReply,
 ) {
   try {
-    const page = Number(req.query.page);
-    const size = Number(req.query.size);
-    const data = await db
+    const baseQuery = await db
       .selectFrom('categories')
-      .offset((page === 0 ? page : page - 1) * size)
-      .limit(size)
+      .$if(Boolean(req.query.search), (qb) =>
+        qb.where('categories.name', 'ilike', `%${req.query.search}%` || ''),
+      )
       .selectAll()
       .execute();
+
     return res.code(200).send({
-      data,
-      pagination: {
-        page,
-        size,
-        total: data.length,
-        // Harcoded
-        totalPages: 3,
-      },
+      data: baseQuery,
       statusCode: 200,
       message: 'Success get book categories',
     });
@@ -43,7 +34,7 @@ export async function selectBookCategories(
         statusCode: 500,
         message: 'Internal Server Error',
         reasons: error.message,
-      })
+      }),
     );
   }
 }
@@ -52,7 +43,7 @@ export async function selectBookCategories(
 type CreateBookCategoryBody = z.infer<typeof bookCategoriesSchema.create.body>;
 export async function insertBookCategory(
   req: FastifyRequest<{ Body: CreateBookCategoryBody }>,
-  res: FastifyReply
+  res: FastifyReply,
 ) {
   try {
     const data = await db
@@ -65,7 +56,7 @@ export async function insertBookCategory(
         data,
         statusCode: 201,
         message: 'Success create book category',
-      })
+      }),
     );
   } catch (error) {
     return res.code(500).send(
@@ -73,7 +64,7 @@ export async function insertBookCategory(
         statusCode: 500,
         message: 'Internal Server Error',
         reasons: error.message,
-      })
+      }),
     );
   }
 }
@@ -88,7 +79,7 @@ export async function updateBookCategory(
     Body: UpdateBookCategoryBody;
     Params: UpdateBookCategoryParams;
   }>,
-  res: FastifyReply
+  res: FastifyReply,
 ) {
   try {
     if (req.body.id !== req.params.id) {
@@ -97,7 +88,7 @@ export async function updateBookCategory(
           statusCode: 400,
           message: 'Invalid Request',
           reasons: 'Book category id is not match with params.',
-        })
+        }),
       );
     }
     const data = await db
@@ -115,7 +106,7 @@ export async function updateBookCategory(
         data,
         statusCode: 201,
         message: 'Success update bookCategory',
-      })
+      }),
     );
   } catch (error) {
     return res.code(500).send(
@@ -123,7 +114,7 @@ export async function updateBookCategory(
         statusCode: 500,
         message: 'Internal Server Error',
         reasons: error.message,
-      })
+      }),
     );
   }
 }
@@ -134,7 +125,7 @@ type DeleteBookCategoryParams = z.infer<
 >;
 export async function deleteBookCategory(
   req: FastifyRequest<{ Params: DeleteBookCategoryParams }>,
-  res: FastifyReply
+  res: FastifyReply,
 ) {
   try {
     const data = await db
@@ -147,7 +138,7 @@ export async function deleteBookCategory(
           data: 'Ok',
           statusCode: 200,
           message: 'Success delete book category',
-        })
+        }),
       );
     }
     res.code(400).send(
@@ -155,7 +146,7 @@ export async function deleteBookCategory(
         statusCode: 400,
         message: 'Failed delete book category',
         reasons: 'Book category id is invalid or does not exist.',
-      })
+      }),
     );
   } catch (error) {
     return res.code(500).send(
@@ -163,7 +154,7 @@ export async function deleteBookCategory(
         statusCode: 500,
         message: 'Internal Server Error',
         reasons: error.message,
-      })
+      }),
     );
   }
 }
