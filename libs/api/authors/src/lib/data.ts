@@ -7,13 +7,28 @@ import { db } from '@/database';
 import { authorsSchema } from '@/shared/schema';
 
 // GET /api/authors
-export async function selectAuthors(_req: FastifyRequest, res: FastifyReply) {
+type AuthorsQuery = z.infer<typeof authorsSchema.read.query>;
+export async function selectAuthors(
+  req: FastifyRequest<{ Querystring: AuthorsQuery }>,
+  res: FastifyReply,
+) {
   try {
-    const data = await db.selectFrom('authors').selectAll().execute();
+    const data = await db
+      .selectFrom('authors')
+      .$if(Boolean(req.query.search), (qb) =>
+        qb.where((wqb) =>
+          wqb.or([
+            wqb('authors.firstName', 'ilike', `%${req.query.search}%`),
+            wqb('authors.lastName', 'ilike', `%${req.query.search}%`),
+          ]),
+        ),
+      )
+      .selectAll()
+      .execute();
     return res
       .code(200)
       .send(
-        responseData({ data, statusCode: 200, message: 'Success get authors' })
+        responseData({ data, statusCode: 200, message: 'Success get authors' }),
       );
   } catch (error) {
     return res.code(500).send(
@@ -21,7 +36,7 @@ export async function selectAuthors(_req: FastifyRequest, res: FastifyReply) {
         statusCode: 500,
         message: 'Internal Server Error',
         reasons: error.message,
-      })
+      }),
     );
   }
 }
@@ -30,7 +45,7 @@ export async function selectAuthors(_req: FastifyRequest, res: FastifyReply) {
 type CreateAuthorBody = z.infer<typeof authorsSchema.create.body>;
 export async function insertAuthor(
   req: FastifyRequest<{ Body: CreateAuthorBody }>,
-  res: FastifyReply
+  res: FastifyReply,
 ) {
   try {
     const data = await db
@@ -43,7 +58,7 @@ export async function insertAuthor(
         data,
         statusCode: 201,
         message: 'Success create author',
-      })
+      }),
     );
   } catch (error) {
     return res.code(500).send(
@@ -51,7 +66,7 @@ export async function insertAuthor(
         statusCode: 500,
         message: 'Internal Server Error',
         reasons: error.message,
-      })
+      }),
     );
   }
 }
@@ -60,7 +75,7 @@ export async function insertAuthor(
 type UpdateAuthorBody = z.infer<typeof authorsSchema.update.body>;
 export async function updateAuthor(
   req: FastifyRequest<{ Body: UpdateAuthorBody; Params: { id: string } }>,
-  res: FastifyReply
+  res: FastifyReply,
 ) {
   try {
     if (req.body.id !== req.params.id) {
@@ -69,7 +84,7 @@ export async function updateAuthor(
           statusCode: 400,
           message: 'Invalid Request',
           reasons: 'Author id is not match with params.',
-        })
+        }),
       );
     }
     const data = await db
@@ -87,7 +102,7 @@ export async function updateAuthor(
         data,
         statusCode: 201,
         message: 'Success update author',
-      })
+      }),
     );
   } catch (error) {
     return res.code(500).send(
@@ -95,7 +110,7 @@ export async function updateAuthor(
         statusCode: 500,
         message: 'Internal Server Error',
         reasons: error.message,
-      })
+      }),
     );
   }
 }
@@ -103,7 +118,7 @@ export async function updateAuthor(
 // DELETE /api/authors/:id
 export async function deleteAuthor(
   req: FastifyRequest<{ Params: { id: string } }>,
-  res: FastifyReply
+  res: FastifyReply,
 ) {
   try {
     const data = await db
@@ -116,7 +131,7 @@ export async function deleteAuthor(
           data: 'Ok',
           statusCode: 200,
           message: 'Success delete author',
-        })
+        }),
       );
     }
     res.code(400).send(
@@ -124,7 +139,7 @@ export async function deleteAuthor(
         statusCode: 400,
         message: 'Failed delete author',
         reasons: 'Author id is invalid or does not exist.',
-      })
+      }),
     );
   } catch (error) {
     return res.code(500).send(
@@ -132,7 +147,7 @@ export async function deleteAuthor(
         statusCode: 500,
         message: 'Internal Server Error',
         reasons: error.message,
-      })
+      }),
     );
   }
 }

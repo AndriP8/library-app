@@ -1,10 +1,13 @@
 import { z } from 'zod';
 
 import { Author } from '../database/authors';
-import { defaultResponse, SchemaType } from '../utils';
+import { defaultQuery, defaultResponse, SchemaType } from '../utils';
 
 // List data
-const listAuthorResponse = defaultResponse.extend({ data: z.array(Author) });
+const listAuthorResponse = defaultResponse.extend({
+  data: z.array(Author),
+});
+const listAuthorsQuery = defaultQuery;
 
 // Create data
 const createAuthorResponse = defaultResponse.extend({ data: Author });
@@ -31,6 +34,7 @@ const path = '/authors';
 export const authorsSchema = {
   read: {
     path,
+    query: listAuthorsQuery,
     response: listAuthorResponse,
   },
   create: {
