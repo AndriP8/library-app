@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { Book } from '../database/books';
-import { defaultResponse, SchemaType } from '../utils';
+import { defaultQuery, defaultResponse, SchemaType } from '../utils';
 
 const getBookExtendableColumns = {
   authors: z.array(z.object({ id: z.string(), name: z.string() })),
@@ -24,9 +24,10 @@ const listBookResponse = defaultResponse.extend({
       datePublished: true,
       createdAt: true,
       updatedAt: true,
-    }).extend(getBookExtendableColumns)
+    }).extend(getBookExtendableColumns),
   ),
 });
+const listBookQuery = defaultQuery;
 
 // Detail data
 const detailBookResponse = defaultResponse.extend({
@@ -62,6 +63,7 @@ const path = '/books';
 export const booksSchema = {
   read: {
     path,
+    query: listBookQuery,
     response: listBookResponse,
   },
   readDetail: {
