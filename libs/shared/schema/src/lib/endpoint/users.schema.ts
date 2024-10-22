@@ -20,19 +20,20 @@ const createUserBody = User.omit({
 
 // Delete data
 const deleteUSerResponse = defaultResponse.extend({ data: z.literal('Ok') });
+const path = '/users';
 
 export const usersSchema = {
   read: {
-    path: '/users',
+    path,
     response: listUserResponse,
   },
   create: {
-    path: '/users',
+    path,
     body: createUserBody,
     response: createUserResponse,
   },
   delete: {
-    path: '/users',
+    path: path + '/:id',
     response: deleteUSerResponse,
   },
 } satisfies Partial<SchemaType>;
