@@ -1,11 +1,17 @@
 import { z } from 'zod';
 
 import { BookCategories } from '../database/book-categories';
-import { defaultQuery, defaultResponse, SchemaType } from '../utils';
+import {
+  defaultQuery,
+  defaultResponse,
+  pagination,
+  SchemaType,
+} from '../utils';
 
 // List data
 const listBookCategoriesResponse = defaultResponse.extend({
   data: z.array(BookCategories),
+  pagination,
 });
 
 const listBookCategoriesQuery = defaultQuery;

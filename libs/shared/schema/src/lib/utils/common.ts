@@ -34,3 +34,10 @@ export const defaultQuery = z.object({
   size: z.number().default(10),
   search: z.string().optional(),
 });
+
+export const pagination = z.object({
+  page: z.number(),
+  size: z.number(),
+  totalSize: z.number(),
+  totalPages: z.number(),
+});

@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { responseData, throwResponse } from '@/api/utils';
 import { defaultTimestamp } from '@/api/utils';
-import { db } from '@/database';
+import { db, getPaginationInfo, paginate } from '@/database';
 import { bookCategoriesSchema } from '@/shared/schema';
 
 // GET /api/book-categories
@@ -15,24 +15,41 @@ export async function selectBookCategories(
   res: FastifyReply,
 ) {
   try {
-    const baseQuery = await db
+    const { page, size, search } = req.query;
+
+    const baseQuery = db
       .selectFrom('categories')
-      .$if(Boolean(req.query.search), (qb) =>
-        qb.where('categories.name', 'ilike', `%${req.query.search}%` || ''),
-      )
+      .$if(Boolean(search), (qb) =>
+        qb.where('categories.name', 'ilike', `%${search}%` || ''),
+      );
+
+    const bookCategories = await baseQuery
       .selectAll()
+      .$call((qb) => paginate(qb, { page, size }))
       .execute();
 
-    return res.code(200).send({
-      data: baseQuery,
-      statusCode: 200,
-      message: 'Success get book categories',
-    });
+    const pagination = await getPaginationInfo(
+      baseQuery,
+      {
+        page,
+        size,
+      },
+      bookCategories.length,
+    );
+
+    return res.code(200).send(
+      responseData({
+        data: bookCategories,
+        pagination,
+        statusCode: 200,
+        message: 'Success get book categories',
+      }),
+    );
   } catch (error) {
-    return res.code(500).send(
+    return res.code(400).send(
       throwResponse({
-        statusCode: 500,
-        message: 'Internal Server Error',
+        statusCode: 400,
+        message: 'Invalid Request',
         reasons: error.message,
       }),
     );
