@@ -1,0 +1,9 @@
+{
+  "name": "backoffice-authors",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backoffice/authors/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project backoffice-authors --web",
+  "targets": {}
+}

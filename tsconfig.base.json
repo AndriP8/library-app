@@ -22,6 +22,7 @@
       "@/api/books": ["libs/api/books/src/index.ts"],
       "@/api/users": ["libs/api/users/src/index.ts"],
       "@/api/utils": ["libs/api/utils/src/index.ts"],
+      "@/backoffice/authors": ["libs/backoffice/authors/src/index.ts"],
       "@/backoffice/login": ["libs/backoffice/login/src/index.ts"],
       "@/backoffice/register": ["libs/backoffice/register/src/index.ts"],
       "@/database": ["libs/api/database/src/index.ts"],
