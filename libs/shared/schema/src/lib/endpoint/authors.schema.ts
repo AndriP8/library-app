@@ -1,11 +1,17 @@
 import { z } from 'zod';
 
 import { Author } from '../database/authors';
-import { defaultQuery, defaultResponse, SchemaType } from '../utils';
+import {
+  defaultQuery,
+  defaultResponse,
+  pagination,
+  SchemaType,
+} from '../utils';
 
 // List data
 const listAuthorResponse = defaultResponse.extend({
   data: z.array(Author),
+  pagination,
 });
 const listAuthorsQuery = defaultQuery;
 

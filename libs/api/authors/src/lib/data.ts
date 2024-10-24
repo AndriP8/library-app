@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { responseData, throwResponse } from '@/api/utils';
 import { defaultTimestamp } from '@/api/utils';
-import { db } from '@/database';
+import { db, getPaginationInfo, paginate } from '@/database';
 import { authorsSchema } from '@/shared/schema';
 
 // GET /api/authors
@@ -13,27 +13,38 @@ export async function selectAuthors(
   res: FastifyReply,
 ) {
   try {
-    const data = await db
+    const { page, size, search } = req.query;
+    const baseQuery = db
       .selectFrom('authors')
-      .$if(Boolean(req.query.search), (qb) =>
+      .$if(Boolean(search), (qb) =>
         qb.where((wqb) =>
           wqb.or([
-            wqb('authors.firstName', 'ilike', `%${req.query.search}%`),
-            wqb('authors.lastName', 'ilike', `%${req.query.search}%`),
+            wqb('authors.firstName', 'ilike', `%${search}%`),
+            wqb('authors.lastName', 'ilike', `%${search}%`),
           ]),
         ),
-      )
-      .selectAll()
-      .execute();
-    return res
-      .code(200)
-      .send(
-        responseData({ data, statusCode: 200, message: 'Success get authors' }),
       );
+    const authors = await baseQuery
+      .selectAll()
+      .$call((qb) => paginate(qb, { page, size }))
+      .execute();
+    const pagination = await getPaginationInfo(
+      baseQuery,
+      { page, size },
+      authors.length,
+    );
+    return res.code(200).send(
+      responseData({
+        data: authors,
+        pagination,
+        statusCode: 200,
+        message: 'Success get authors',
+      }),
+    );
   } catch (error) {
-    return res.code(500).send(
+    return res.code(400).send(
       throwResponse({
-        statusCode: 500,
+        statusCode: 400,
         message: 'Internal Server Error',
         reasons: error.message,
       }),
