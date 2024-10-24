@@ -1,7 +1,12 @@
 import { z } from 'zod';
 
 import { Book } from '../database/books';
-import { defaultQuery, defaultResponse, SchemaType } from '../utils';
+import {
+  defaultQuery,
+  defaultResponse,
+  pagination,
+  SchemaType,
+} from '../utils';
 
 const getBookExtendableColumns = {
   authors: z.array(z.object({ id: z.string(), name: z.string() })),
@@ -26,6 +31,7 @@ const listBookResponse = defaultResponse.extend({
       updatedAt: true,
     }).extend(getBookExtendableColumns),
   ),
+  pagination,
 });
 const listBookQuery = defaultQuery;
 

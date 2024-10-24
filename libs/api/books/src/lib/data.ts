@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 import { responseData, throwResponse } from '@/api/utils';
 import { defaultTimestamp } from '@/api/utils';
-import { db } from '@/database';
+import { db, getPaginationInfo, paginate } from '@/database';
 import { booksSchema } from '@/shared/schema';
 
 // GET /api/books
@@ -14,11 +14,14 @@ export async function selectBooks(
   res: FastifyReply,
 ) {
   try {
-    const booksData = await db
+    const { page, size, search } = req.query;
+    const baseQuery = db
       .selectFrom('books')
-      .$if(Boolean(req.query.search), (qb) =>
-        qb.where('books.title', 'ilike', `%${req.query.search}%` || ''),
-      )
+      .$if(Boolean(search), (qb) =>
+        qb.where('books.title', 'ilike', `%${search}%` || ''),
+      );
+
+    const books = await baseQuery
       .select([
         'books.id',
         'books.title',
@@ -28,10 +31,11 @@ export async function selectBooks(
         'books.createdAt',
         'books.updatedAt',
       ])
+      .$call((qb) => paginate(qb, { page, size }))
       .execute();
 
     const booksWithRelations = await Promise.all(
-      booksData.map(async (book) => {
+      books.map(async (book) => {
         const authors = await db
           .selectFrom('authors')
           .innerJoin('bookAuthors', 'authors.id', 'bookAuthors.authorId')
@@ -66,9 +70,16 @@ export async function selectBooks(
       }),
     );
 
+    const pagination = await getPaginationInfo(
+      baseQuery,
+      { page, size },
+      books.length,
+    );
+
     return res.code(200).send(
       responseData({
         data: booksWithRelations,
+        pagination,
         statusCode: 200,
         message: 'Success get books',
       }),
