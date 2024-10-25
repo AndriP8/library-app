@@ -1,6 +1,7 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
+import Link from 'next/link';
 import { useEffect } from 'react';
 import { z } from 'zod';
 
@@ -53,12 +54,13 @@ export function BackofficeAuthors() {
     <div className="space-y-6">
       <h1 className="text-2xl font-semibold">Authors</h1>
       <div className="flex justify-end">
-        <Button>Add Author</Button>
+        <Link href="/backoffice/author/add">
+          <Button>Add Author</Button>
+        </Link>
       </div>
       <DataTable
         columns={columns}
         data={data}
-        // TODO: update pagination when integration
         pagination={pagination}
         onPaginationChange={setPagination}
         pageCount={pageCount}
