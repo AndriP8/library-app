@@ -17,7 +17,7 @@ import {
 } from '@/shared/components/base';
 import { useTokenContext } from '@/shared/utils';
 
-import { addAuthorMutation } from './mutations/add-author.mutation';
+import { addAuthorMutation } from '../mutations/add-author.mutation';
 import { AddAuthorSchema, addAuthorSchema } from './schema/add-author.schema';
 
 export function BackofficeAddAuthors() {

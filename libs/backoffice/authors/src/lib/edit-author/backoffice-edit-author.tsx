@@ -22,7 +22,7 @@ import {
   AuthorResponse,
   getAuthorDetail,
 } from '../data-fetching/get-author-detail';
-import { editAuthorMutation } from './mutations/edit-author.mutation';
+import { editAuthorMutation } from '../mutations/edit-author.mutation';
 import { AddAuthorSchema, editAuthorSchema } from './schema/edit-author.schema';
 
 export function BackofficeEditAuthor() {

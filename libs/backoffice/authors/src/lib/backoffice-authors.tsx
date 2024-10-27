@@ -2,18 +2,21 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { z } from 'zod';
 
-import { Button, DataTable } from '@/shared/components/base';
+import { Button, DataTable, toast } from '@/shared/components/base';
 import { authorsSchema } from '@/shared/schema';
 import { formatDate, useTableInfo, useTokenContext } from '@/shared/utils';
 
 import { getAuthors } from './data-fetching/get-authors';
+import { deleteAuthorMutation } from './mutations/delete-author.mutation';
 
 type Author = z.infer<typeof authorsSchema.read.response>['data'][number];
 
 export function BackofficeAuthors() {
+  const [isDeleted, setIsDeleted] = useState(false);
   const {
     data,
     pageCount,
@@ -23,6 +26,33 @@ export function BackofficeAuthors() {
     setPageData,
   } = useTableInfo<Author>();
   const { token } = useTokenContext();
+  const router = useRouter();
+
+  const onDeleteAuthor = async (id: string) => {
+    setIsDeleted(false);
+    const mutation = await deleteAuthorMutation(token, id);
+    if ('reasons' in mutation) {
+      const reasons = JSON.parse(mutation.reasons);
+      let description = '';
+      for (const key in reasons) {
+        description = `${key}: ${reasons[key][0]}`;
+      }
+      toast({
+        title: mutation.message,
+        description: <span className="capitalize">{description}</span>,
+        type: 'foreground',
+      });
+    }
+    if ('data' in mutation) {
+      toast({
+        title: 'Delete Author Success',
+        description: '',
+        type: 'foreground',
+      });
+      router.refresh();
+      setIsDeleted(true);
+    }
+  };
 
   const columns: ColumnDef<Author, 'firstName'>[] = [
     {
@@ -49,7 +79,12 @@ export function BackofficeAuthors() {
             <Link href={`/backoffice/author/${row.original.id}`}>
               <Button variant="outline">Edit</Button>
             </Link>
-            <Button variant="destructive">Delete</Button>
+            <Button
+              variant="destructive"
+              onClick={() => onDeleteAuthor(row.original.id)}
+            >
+              Delete
+            </Button>
           </div>
         );
       },
@@ -57,12 +92,12 @@ export function BackofficeAuthors() {
   ];
 
   useEffect(() => {
-    if (!token) return;
+    if (!token && !isDeleted) return;
     const query = tableQuery();
     getAuthors(token, query).then((res) =>
       setPageData(res.data, res.pagination.totalPages),
     );
-  }, [tableQuery, setPageData, token]);
+  }, [tableQuery, setPageData, token, isDeleted]);
 
   return (
     <div className="space-y-6">
