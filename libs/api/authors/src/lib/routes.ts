@@ -8,6 +8,7 @@ import { authorsSchema } from '@/shared/schema';
 import {
   deleteAuthor,
   insertAuthor,
+  selectAuthorDetail,
   selectAuthors,
   updateAuthor,
 } from './data';
@@ -23,6 +24,25 @@ export async function routes(fastify: FastifyInstance) {
       },
     },
     handler: selectAuthors,
+    errorHandler: (error, _req, res) => {
+      res.code(400).send(
+        throwResponse({
+          statusCode: 400,
+          message: 'Invalid Request',
+          reasons: error.message,
+        }),
+      );
+    },
+  });
+  fastify.withTypeProvider<ZodTypeProvider>().route({
+    method: 'GET',
+    url: authorsSchema.readDetail.path,
+    schema: {
+      response: {
+        // 200: authorsSchema.readDetail.response,
+      },
+    },
+    handler: selectAuthorDetail,
     errorHandler: (error, _req, res) => {
       res.code(400).send(
         throwResponse({

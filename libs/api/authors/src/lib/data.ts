@@ -52,6 +52,36 @@ export async function selectAuthors(
   }
 }
 
+// GET /api/authors/:id
+export async function selectAuthorDetail(
+  req: FastifyRequest<{ Params: { id: string } }>,
+  res: FastifyReply,
+) {
+  try {
+    const authors = await db
+      .selectFrom('authors')
+      .where('id', '=', req.params.id)
+      .selectAll()
+      .executeTakeFirstOrThrow();
+
+    return res.code(200).send(
+      responseData({
+        data: authors,
+        statusCode: 200,
+        message: 'Success get authors',
+      }),
+    );
+  } catch (error) {
+    return res.code(400).send(
+      throwResponse({
+        statusCode: 400,
+        message: 'Internal Server Error',
+        reasons: error.message,
+      }),
+    );
+  }
+}
+
 // POST /api/authors
 type CreateAuthorBody = z.infer<typeof authorsSchema.create.body>;
 export async function insertAuthor(

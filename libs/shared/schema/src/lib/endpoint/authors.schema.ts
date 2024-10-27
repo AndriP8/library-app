@@ -15,6 +15,11 @@ const listAuthorResponse = defaultResponse.extend({
 });
 const listAuthorsQuery = defaultQuery;
 
+// Detail data
+const detailAuthorResponse = defaultResponse.extend({
+  data: Author,
+});
+
 // Create data
 const createAuthorResponse = defaultResponse.extend({ data: Author });
 const createAuthorBody = Author.omit({
@@ -42,6 +47,10 @@ export const authorsSchema = {
     path,
     query: listAuthorsQuery,
     response: listAuthorResponse,
+  },
+  readDetail: {
+    path: path + '/:id',
+    response: detailAuthorResponse,
   },
   create: {
     path,
