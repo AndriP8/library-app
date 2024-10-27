@@ -16,6 +16,11 @@ const listBookCategoriesResponse = defaultResponse.extend({
 
 const listBookCategoriesQuery = defaultQuery;
 
+// Detail data
+const detailAuthorResponse = defaultResponse.extend({
+  data: BookCategories,
+});
+
 // Create data
 const createBookCategoriesResponse = defaultResponse.extend({
   data: BookCategories,
@@ -49,6 +54,10 @@ export const bookCategoriesSchema = {
     path,
     query: listBookCategoriesQuery,
     response: listBookCategoriesResponse,
+  },
+  readDetail: {
+    path: path + '/:id',
+    response: detailAuthorResponse,
   },
   create: {
     path,

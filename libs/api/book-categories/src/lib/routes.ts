@@ -9,6 +9,7 @@ import {
   deleteBookCategory,
   insertBookCategory,
   selectBookCategories,
+  selectBookCategoryDetail,
   updateBookCategory,
 } from './data';
 
@@ -23,6 +24,25 @@ export async function routes(fastify: FastifyInstance) {
       },
     },
     handler: selectBookCategories,
+    errorHandler: (error, _req, res) => {
+      res.code(400).send(
+        throwResponse({
+          statusCode: 400,
+          message: 'Invalid Request',
+          reasons: error.message,
+        }),
+      );
+    },
+  });
+  fastify.withTypeProvider<ZodTypeProvider>().route({
+    method: 'GET',
+    url: bookCategoriesSchema.readDetail.path,
+    schema: {
+      response: {
+        200: bookCategoriesSchema.readDetail.response,
+      },
+    },
+    handler: selectBookCategoryDetail,
     errorHandler: (error, _req, res) => {
       res.code(400).send(
         throwResponse({

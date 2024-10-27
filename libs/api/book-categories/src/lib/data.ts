@@ -56,6 +56,38 @@ export async function selectBookCategories(
   }
 }
 
+// GET /api/book-categories/:id
+export async function selectBookCategoryDetail(
+  req: FastifyRequest<{
+    Params: { id: string };
+  }>,
+  res: FastifyReply,
+) {
+  try {
+    const bookCategories = await db
+      .selectFrom('categories')
+      .where('id', '=', req.params.id)
+      .selectAll()
+      .executeTakeFirstOrThrow();
+
+    return res.code(200).send(
+      responseData({
+        data: bookCategories,
+        statusCode: 200,
+        message: 'Success get book category detail',
+      }),
+    );
+  } catch (error) {
+    return res.code(400).send(
+      throwResponse({
+        statusCode: 400,
+        message: 'Invalid Request',
+        reasons: error.message,
+      }),
+    );
+  }
+}
+
 // POST /api/book-categories
 type CreateBookCategoryBody = z.infer<typeof bookCategoriesSchema.create.body>;
 export async function insertBookCategory(

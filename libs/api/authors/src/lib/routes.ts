@@ -39,7 +39,7 @@ export async function routes(fastify: FastifyInstance) {
     url: authorsSchema.readDetail.path,
     schema: {
       response: {
-        // 200: authorsSchema.readDetail.response,
+        200: authorsSchema.readDetail.response,
       },
     },
     handler: selectAuthorDetail,
