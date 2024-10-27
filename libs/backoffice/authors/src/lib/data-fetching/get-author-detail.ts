@@ -3,15 +3,14 @@ import { z } from 'zod';
 import { ThrowResponse } from '@/api/utils';
 import { authorsSchema } from '@/shared/schema';
 
-type AuthorsResponse = z.infer<typeof authorsSchema.read.response>;
-type AuthorQuery = z.infer<typeof authorsSchema.read.query>;
+export type AuthorResponse = z.infer<typeof authorsSchema.readDetail.response>;
 
-export const getAuthors = async (
+export const getAuthorDetail = async (
   token: string,
-  query?: AuthorQuery,
-): Promise<AuthorsResponse> => {
+  id: string,
+): Promise<AuthorResponse> => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api${authorsSchema.read.path}?size=${query?.size}&page=${query?.page}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/authors/${id}`,
     {
       method: 'GET',
       headers: {
@@ -22,7 +21,7 @@ export const getAuthors = async (
   );
   if (!res.ok) {
     const errorResponse = (await res.json()) as ThrowResponse;
-    throw new Error(`Failed to fetch authors: ${errorResponse.reasons}`);
+    throw new Error(`Failed to fetch author: ${errorResponse.reasons}`);
   }
   return res.json();
 };

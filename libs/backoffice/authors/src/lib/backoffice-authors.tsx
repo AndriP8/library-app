@@ -40,6 +40,20 @@ export function BackofficeAuthors() {
       header: 'Updated At',
       cell: ({ row }) => formatDate(new Date(row.original.updatedAt)),
     },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => {
+        return (
+          <div className="flex gap-2">
+            <Link href={`/backoffice/author/${row.original.id}`}>
+              <Button variant="outline">Edit</Button>
+            </Link>
+            <Button variant="destructive">Delete</Button>
+          </div>
+        );
+      },
+    },
   ];
 
   useEffect(() => {
