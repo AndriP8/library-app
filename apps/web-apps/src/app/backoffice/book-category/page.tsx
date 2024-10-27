@@ -1,3 +1,5 @@
+import { BackofficeBookCategories } from '@/backoffice/book-categories';
+
 export default async function Page() {
-  return <div>Book Category</div>;
+  return <BackofficeBookCategories />;
 }
