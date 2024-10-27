@@ -2,3 +2,4 @@
 
 export * from './lib/add-book-category/backoffice-add-book-category';
 export * from './lib/backoffice-book-categories';
+export * from './lib/edit-book-category/backoffice-edit-book-category';
