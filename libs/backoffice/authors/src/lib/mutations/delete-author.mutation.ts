@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { ThrowResponse } from '@/api/utils';
 import { authorsSchema } from '@/shared/schema';
 
-type AddAuthorResponse = z.infer<typeof authorsSchema.update.response>;
+type AddAuthorResponse = z.infer<typeof authorsSchema.delete.response>;
 
 export const deleteAuthorMutation = async (
   token: string,
